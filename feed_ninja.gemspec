@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary           = "A tiny helper to rip the interesting bits out of RSS and Atom feeds"
   s.description       = "This gem can be used to take an RSS or Atom feed, follow the links they provide and extract images and/or text with xpath. The data is then reformatted into a new Atom feed.
 It is inteded to be used with feeds that only provide a sneak peek of the content, to rip all the interesting bits out for displaying in your feed reader immediately."
-  s.files             = FileList['lib/*'].to_a
+  s.files             = Dir['README.md', 'lib/**/*' ,'spec/**/*']
   s.licenses          = 'MIT'
 
   s.require_path = 'lib'
