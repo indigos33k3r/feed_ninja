@@ -4,15 +4,15 @@ require 'nokogiri'
 require 'time'
 
 class FeedNinja
-	attr_accessor :uri, :picture_xpath, :text_xpath, :title_regex, :limit
+  attr_accessor :uri, :picture_xpath, :text_xpath, :title_regex, :limit
   attr_accessor :extractor
 
-	def initialize (uri = nil)
-		@limit = 2
+  def initialize
+    @limit = 2
     @extractor = Extractor.new
     @writer = AtomIshWriter.new
     @ninja_prefix = "N! "
-	end
+  end
 
   def initialize_writer doc
     @writer.updated = DateTime.now.to_s
@@ -30,13 +30,13 @@ class FeedNinja
   end
 
   # get the feed and iterate over the entries
-	def fetch url
-		open(url) do |feed|
-			doc = RSS::Parser.parse(feed)
+  def fetch url
+    open(url) do |feed|
+      doc = RSS::Parser.parse(feed)
       initialize_writer(doc)
       process_items(doc)
-		end
-	end
+    end
+  end
 
   def process_items doc
     items = doc.items
@@ -69,12 +69,11 @@ class FeedNinja
       entry.images = @extractor.extract_images @picture_xpath
       entry.summary = @extractor.extract_xml @text_xpath
     end
-
   end
 
-	def to_s
-		@writer.to_s
-	end
+  def to_s
+    @writer.to_s
+  end
 
   ## DSL convenience setters
 

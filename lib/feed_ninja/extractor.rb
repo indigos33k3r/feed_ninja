@@ -8,11 +8,11 @@ class Extractor
     end
   end
 
-	def extract_images(base_url, *xpaths)
-		Array(xpaths).collect_concat do |xpath|
+  def extract_images(base_url, *xpaths)
+    Array(xpaths).collect_concat do |xpath|
       extract_image(base_url, xpath)
-		end
-	end
+    end
+  end
 
   def extract_image(base_url, xpath)
     @doc.xpath(xpath).collect do | picture_src |
@@ -24,11 +24,11 @@ class Extractor
     end
   end
 
-	def extract_xml *xpaths
-		Array(xpaths).collect_concat do |xpath|
-			@doc.xpath(xpath).collect do |result|
-				result.to_s
-			end
+  def extract_xml *xpaths
+    Array(xpaths).collect_concat do |xpath|
+      @doc.xpath(xpath).collect do |result|
+        result.to_s
+      end
     end
-	end
+  end
 end
