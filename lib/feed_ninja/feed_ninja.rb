@@ -58,14 +58,15 @@ class FeedNinja
         entry.link = original.link.href
         entry.updated = original.updated
         entry.id = original.id
+        @extractor.fetch original.link.href
       when "rss"
         entry.title = original.title
         entry.link = original.link
         entry.updated = original.pubDate ? original.pubDate.xmlschema : DateTime.now.to_s
         entry.id = entry.link
+        @extractor.fetch original.link
       end
 
-      @extractor.fetch original.link
       entry.images = @extractor.extract_images @picture_xpath
       entry.summary = @extractor.extract_xml @text_xpath
 

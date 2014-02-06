@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name              = "feed_ninja"
-  s.version           = "0.0.1"
+  s.version           = "0.0.3"
   s.date              = '2014-02-06'
   s.platform          = Gem::Platform::RUBY
   s.author           = "Daniel Latzer"
