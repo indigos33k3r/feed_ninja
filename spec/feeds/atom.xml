@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>atom</title>
+  <link rel="alternate" type="text/html" href="http://example.com/atom"/>
+  <updated>2007-07-13T18:30:02Z</updated>
+  <author>
+    <name>feedninja</name>
+  </author>
+  <id>http://example.com/atom</id>
+
+  <entry>
+    <title>one</title>
+    <link href="http://example.com/one"/>
+    <id>1</id>
+    <updated>2007-07-13T18:30:02Z</updated>
+    <summary>summary_one</summary>
+  </entry>
+
+  <entry>
+    <title>two</title>
+    <link href="http://example.com/two"/>
+    <id>2</id>
+    <updated>2007-07-13T18:30:02Z</updated>
+    <summary>summary_two</summary>
+  </entry>
+
+</feed>

@@ -34,50 +34,27 @@ class AtomIshWriter
 end
 
 class Entry
-	attr_accessor :title, :imgLink, :originalLink, :updated, :text
+	attr_accessor :title, :link, :images, :updated, :summary, :id
 
 	def to_s
 		puts %{
   <entry>
     <title>#{@title}</title>
-    <link rel="alternate" type="text/html" href="#{@imgLink}" />
-    <id>#{@originalLink}</id>
+    <link rel="alternate" type="text/html" href="#{@link}" />
+    <id>#{@id}</id>
     <updated>#{@updated}</updated>
     <content type="html">#{self.content.encode(:xml => :text)}</content>
 	</entry>
 		}
 	end
 
-	def title= title
-		if title.respond_to? :content then
-			@title = title.content
-		else
-			@title = title.to_s
-		end
-	end
-
-	def originalLink= link
-		if link.respond_to? :href then
-			@originalLink = link.href
-		else
-			@originalLink = link.to_s
-		end
-	end
-
-	def updated= elem
-		if elem.respond_to? :content then
-			@updated = elem.content
-		else
-			@updated = elem.to_s
-		end
-	end
-
 	def content
-		%{
-			<a href="#{@originalLink}">
-				<img src="#{@imgLink}"/>
+    @images.inject("") do |memo, src|
+      memo += %{
+			<a href="#{src}">
+				<img src="#{src}"/>
 			</a>
-			#{@text}
-		}
+      }
+    end + summary || ""
 	end
 end

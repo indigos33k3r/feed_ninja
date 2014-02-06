@@ -5,90 +5,75 @@ require 'time'
 
 class FeedNinja
 	attr_accessor :uri, :picture_xpath, :text_xpath, :title_regex, :limit
+  attr_accessor :extractor
 
 	def initialize (uri = nil)
-    @uri = uri
 		@limit = 2
+    @extractor = Extractor.new
+    @writer = AtomIshWriter.new
+    @ninja_prefix = "N! "
 	end
 
-	def fetchFeed
-		open(@uri) do |rss|
-			@in = RSS::Parser.parse(rss)
-		end
-	end
+  def initialize_writer doc
+    @writer.updated = DateTime.now.to_s
+
+    case doc.feed_type
+    when "atom"
+      @writer.title = @ninja_prefix + doc.title.content
+      @writer.link = doc.link.href
+    when "rss"
+      @writer.title = @ninja_prefix + doc.channel.title
+      @writer.link = doc.channel.link
+    else
+      raise "Invalid feed format"
+    end
+  end
 
   # get the feed and iterate over the entries
-	def process
-		@out = AtomIshWriter.new
-    #TODO use @in.feed_type == "atom" / "rss"
-		@out.updated = DateTime.now.to_s
-		if @in.respond_to? "channel" then
-			@out.title = "N!#{@in.channel.title}"
-			@out.link = @in.channel.link
-		else
-			@out.title = "N!#{@in.title.content}"
-			@out.link = @in.link.href
-
-		end
-
-		i = 0
-		@in.items.each do |original|
-			next if title_regex and not title_regex =~ original.title
-			break if i == limit
-			i = i+1
-
-			@out.new_entry do |item|
-				item.originalLink = original.link
-				item.title = original.title
-				if original.respond_to? 'pubDate' then
-					item.updated = original.pubDate.xmlschema
-				else
-					item.updated = original.updated
-				end
-        #FIXME that ain't gonna work exactly like that anymore, since image is now gonna be an array
-				item.imgLink, item.text = extract original.link
-			end
+	def fetch url
+		open(url) do |feed|
+			doc = RSS::Parser.parse(feed)
+      initialize_writer(doc)
+      process_items(doc)
 		end
 	end
 
-  # extract the specified elements from the entries provided by the feed
+  def process_items doc
+    items = doc.items
+    if title_regex
+      items = items.select { |item| title_regex =~ item.title }
+    end
+    items.first(@limit).each do |item|
 
-	def extract uri
-		uri = uri.href if uri.respond_to? 'href'
-		open(uri) do |site|
-			doc = Nokogiri::HTML(site)
-			return extract_image(doc, site.base_uri), extract_xml(doc)
-		end
-	end
+      #TODO add multithreading here; be sure to use multiple extractor instances
+      process_item item, doc.feed_type
+    end
+  end
 
-	def extract_image doc, base
-		Array(@picture_xpath).collect_concat do |xpath|
-			doc.xpath(xpath).collect do | picture_src |
-				if(picture_src.to_s.start_with? 'http') then
-					picture_src.to_s
-				else
-					"#{base.scheme}://#{base.host}/#{base.path}#{picture_src}"
-				end
-			end
-		end
-	end
+  def process_item original, feed_type
+    @writer.new_entry do |entry|
+      case feed_type
+      when "atom"
+        entry.title = original.title.content
+        entry.link = original.link.href
+        entry.updated = original.updated
+        entry.id = original.id
+      when "rss"
+        entry.title = original.title
+        entry.link = original.link
+        entry.updated = original.pubDate ? original.pubDate.xmlschema : DateTime.now.to_s
+        entry.id = entry.link
+      end
 
-	def extract_xml doc
-		Array(@text_xpath).collect do |xpath|
-			doc.xpath(xpath).inject do | result, text_html |
-				result.to_s + text_html.to_s
-			end
-    end.join("\n")
-	end
+      @extractor.fetch original.link
+      entry.images = @extractor.extract_images @picture_xpath
+      entry.summary = @extractor.extract_xml @text_xpath
+    end
 
-	def output
-		puts @out.to_s
-	end
+  end
 
-	def run
-		fetchFeed
-		process
-		output
+	def to_s
+		@writer.to_s
 	end
 
   ## DSL convenience setters
