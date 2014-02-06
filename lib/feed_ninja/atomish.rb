@@ -23,9 +23,7 @@ class AtomIshWriter
     <uri>http://github.com/Tourniquet/feedninja</uri>
     <email>latzer.daniel@gmail.com</email>
   </author>
-    #{@entries.inject { |memo, entry| memo.to_s + entry.to_s }.to_s}
-</feed>
-}
+    #{@entries.inject { |memo, entry| memo.to_s + entry.to_s }.to_s}</feed>}
 
   end
 end

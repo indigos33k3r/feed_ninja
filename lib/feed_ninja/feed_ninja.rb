@@ -68,6 +68,8 @@ class FeedNinja
       @extractor.fetch original.link
       entry.images = @extractor.extract_images @picture_xpath
       entry.summary = @extractor.extract_xml @text_xpath
+
+      entry #it's kind of fishy to explicitly have to return the entry here...
     end
   end
 
