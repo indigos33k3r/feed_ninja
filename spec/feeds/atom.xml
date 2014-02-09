@@ -25,4 +25,11 @@
     <summary>summary_two</summary>
   </entry>
 
+  <entry>
+    <title>three</title>
+    <link href="http://example.com/three"/>
+    <id>3</id>
+    <updated>2007-07-13T18:30:02Z</updated>
+    <summary>summary_three</summary>
+  </entry>
 </feed>

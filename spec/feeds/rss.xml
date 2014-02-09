@@ -15,5 +15,10 @@
     <link>http://example.com/two</link>
     <description>description_two</description>
   </item>
+  <item>
+    <title>three</title>
+    <link>http://example.com/three</link>
+    <description>description_three</description>
+  </item>
 </channel>
 </rss>

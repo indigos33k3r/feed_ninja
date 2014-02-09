@@ -8,7 +8,7 @@ describe AtomIshWriter do
     writer.link = 'http://example.com/atom'
     writer.updated = DateTime.now.to_s
 
-    writer.new_entry do |entry|
+    writer.new_entry(0) do |entry|
       entry = Entry.new
       entry.title = "title"
       entry.link = "http://example.com/one"
@@ -18,7 +18,7 @@ describe AtomIshWriter do
       entry.updated = DateTime.now.to_s
     end
 
-    writer.new_entry do |entry|
+    writer.new_entry(1) do |entry|
       entry = Entry.new
       entry.title = "title"
       entry.link = "http://example.com/two"

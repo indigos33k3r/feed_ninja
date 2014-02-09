@@ -2,14 +2,14 @@ require 'rss'
 require 'open-uri'
 require 'nokogiri'
 require 'time'
+require 'thread'
+require 'thwait'
 
 class FeedNinja
   attr_accessor :uri, :picture_xpath, :text_xpath, :title_regex, :limit
-  attr_accessor :extractor
 
   def initialize
-    @limit = 2
-    @extractor = Extractor.new
+    @limit = 4
     @writer = AtomIshWriter.new
     @ninja_prefix = "N! "
   end
@@ -43,32 +43,33 @@ class FeedNinja
     if title_regex
       items = items.select { |item| title_regex =~ item.title }
     end
-    items.first(@limit).each do |item|
-
-      #TODO add multithreading here; be sure to use multiple extractor instances
-      process_item item, doc.feed_type
+    threads = []
+    items.first(@limit).each_with_index do |item, index|
+      threads << Thread.new { process_item(item, doc.feed_type, index) }
     end
+    ThreadsWait.all_waits(*threads)
   end
 
-  def process_item original, feed_type
-    @writer.new_entry do |entry|
+  def process_item(original, feed_type, index)
+    @writer.new_entry(index) do |entry|
+      extractor = Extractor.new
       case feed_type
       when "atom"
         entry.title = original.title.content
         entry.link = original.link.href
         entry.updated = original.updated
         entry.id = original.id
-        @extractor.fetch original.link.href
+        extractor.fetch original.link.href
       when "rss"
         entry.title = original.title
         entry.link = original.link
         entry.updated = original.pubDate ? original.pubDate.xmlschema : DateTime.now.to_s
         entry.id = entry.link
-        @extractor.fetch original.link
+        extractor.fetch original.link
       end
 
-      entry.images = @extractor.extract_images @picture_xpath
-      entry.summary = @extractor.extract_xml @text_xpath
+      entry.images = extractor.extract_images @picture_xpath
+      entry.summary = extractor.extract_xml @text_xpath
 
       entry #it's kind of fishy to explicitly have to return the entry here...
     end

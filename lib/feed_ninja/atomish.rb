@@ -4,10 +4,10 @@ class AtomIshWriter
     @entries = []
   end
 
-  def new_entry
+  def new_entry(index)
     item = Entry.new
     item = yield item
-    @entries << item;
+    @entries[index] = item
   end
 
   def to_s
