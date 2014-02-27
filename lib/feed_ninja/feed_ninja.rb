@@ -5,6 +5,8 @@ require 'time'
 require 'thread'
 require 'thwait'
 
+Thread.abort_on_exception = true
+
 class FeedNinja
   attr_accessor :uri, :picture_xpath, :text_xpath, :title_regex, :limit
 
@@ -52,6 +54,7 @@ class FeedNinja
 
   def process_item(original, feed_type, index)
     @writer.new_entry(index) do |entry|
+      LOGGER.debug{ "making new entry #{index}" }
       extractor = Extractor.new
       case feed_type
       when "atom"
@@ -68,9 +71,12 @@ class FeedNinja
         extractor.fetch original.link
       end
 
-      entry.images = extractor.extract_images @picture_xpath
+      LOGGER.debug{ "extracting for entry #{index} #{entry}" }
+      entry.images = extractor.extract_images(entry.link, @picture_xpath)
+      LOGGER.debug{ "RATATAT" }
       entry.summary = extractor.extract_xml @text_xpath
 
+      LOGGER.debug{ "adding entry #{index} #{entry}" }
       entry #it's kind of fishy to explicitly have to return the entry here...
     end
   end

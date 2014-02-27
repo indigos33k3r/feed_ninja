@@ -31,6 +31,10 @@ end
 class Entry
   attr_accessor :title, :link, :images, :updated, :summary, :id
 
+  def initialize
+    @summary = []
+  end
+
   def to_s
     %{  <entry>
     <title>#{@title}</title>
@@ -49,7 +53,6 @@ class Entry
         <img src="#{src}"/>
       </a>
       }
-    #end + summary || ""
-    end
+    end + @summary.join("\n")
   end
 end

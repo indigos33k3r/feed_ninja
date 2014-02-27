@@ -2,8 +2,8 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name              = "feed_ninja"
-  s.version           = "0.0.4"
-  s.date              = '2014-02-16'
+  s.version           = "0.0.5"
+  s.date              = '2014-02-27'
   s.platform          = Gem::Platform::RUBY
   s.author           = "Daniel Latzer"
   s.email             = "latzer.daniel@gmail.com"
