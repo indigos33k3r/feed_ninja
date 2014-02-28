@@ -32,7 +32,7 @@ class Extractor
 
   def extract_xml(xpaths)
     LOGGER.debug{ "collecting text" }
-    xpaths.collect_concat do |xpath|
+    [*xpaths].collect_concat do |xpath|
       LOGGER.debug{ "collecting text:xpath #{xpath}" }
       @doc.xpath(xpath).collect do |result|
         LOGGER.debug{ "collecting text:result #{result}" }

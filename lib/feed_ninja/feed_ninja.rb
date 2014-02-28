@@ -34,6 +34,9 @@ class FeedNinja
   # get the feed and iterate over the entries
   def fetch url
     open(url) do |feed|
+      if feed.content_encoding == ['gzip'] then
+        feed = Zlib::GzipReader.new(StringIO.new(feed.read)).read
+      end
       doc = RSS::Parser.parse(feed)
       initialize_writer(doc)
       process_items(doc)
