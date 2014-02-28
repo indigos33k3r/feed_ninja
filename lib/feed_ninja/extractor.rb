@@ -13,7 +13,7 @@ class Extractor
 
   def extract_images(base_url, xpaths)
     LOGGER.debug{ "collecting images for #{xpaths}" }
-    xpaths.collect_concat do |xpath|
+    [*xpaths].collect_concat do |xpath|
       LOGGER.debug{ "collecting image:xpath #{xpath}" }
       extract_image(URI(base_url), xpath)
     end
