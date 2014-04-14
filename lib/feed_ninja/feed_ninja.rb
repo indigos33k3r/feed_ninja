@@ -63,8 +63,8 @@ class FeedNinja
       when "atom"
         entry.title = original.title.content
         entry.link = original.link.href
-        entry.updated = original.updated
-        entry.id = original.id
+        entry.updated = original.updated.content
+        entry.id = original.id.content
         extractor.fetch original.link.href
       when "rss"
         entry.title = original.title
