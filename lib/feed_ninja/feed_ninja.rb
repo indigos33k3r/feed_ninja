@@ -75,7 +75,8 @@ class FeedNinja
       end
 
       LOGGER.debug{ "extracting for entry #{index} #{entry}" }
-      entry.images = extractor.extract_images(entry.link, @picture_xpath)
+
+      entry.images = extractor.extract_images(@picture_xpath)
       LOGGER.debug{ "RATATAT" }
       entry.summary = extractor.extract_xml @text_xpath
 

@@ -1,8 +1,11 @@
 require 'rake'
 
+$:.unshift File.expand_path('../lib', __FILE__)
+require 'feed_ninja/version'
+
 Gem::Specification.new do |s|
   s.name        = "feed_ninja"
-  s.version     = "0.0.8"
+  s.version     = FeedNinja::VERSION
   s.date        = DateTime.now.strftime('%Y-%m-%d')
   s.platform    = Gem::Platform::RUBY
   s.author      = "Daniel Latzer"

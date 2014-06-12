@@ -7,26 +7,22 @@ class Extractor
   def fetch uri
     open(uri) do |site|
       @doc = Nokogiri::HTML(site)
+      @base_uri = site.base_uri
       #return extract_image(doc, site.base_uri), extract_xml(doc)
     end
   end
 
-  def extract_images(base_url, xpaths)
+  def extract_images(xpaths)
     LOGGER.debug{ "collecting images for #{xpaths}" }
     [*xpaths].collect_concat do |xpath|
       LOGGER.debug{ "collecting image:xpath #{xpath}" }
-      extract_image(URI(base_url), xpath)
+      extract_image(xpath)
     end
   end
 
-  def extract_image(base_url, xpath)
-    @doc.xpath(xpath).collect do | picture_src |
-      if(picture_src.to_s.start_with? 'http') then
-        picture_src.to_s
-      else
-        LOGGER.debug { "BASE URL IS #{base_url.class}" }
-        "#{base_url.scheme}://#{base_url.host}/#{base_url.path}#{picture_src}"
-      end
+  def extract_image(xpath)
+    @doc.xpath(xpath).collect do | picture_href |
+      URI.join(@base_uri, picture_href)
     end
   end
 
