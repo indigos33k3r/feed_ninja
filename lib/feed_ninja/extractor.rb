@@ -5,7 +5,7 @@ class Extractor
   attr_accessor :doc
 
   def fetch uri
-    open(uri) do |site|
+    open(URI(uri)) do |site|
       @doc = Nokogiri::HTML(site)
       @base_uri = site.base_uri
       #return extract_image(doc, site.base_uri), extract_xml(doc)
