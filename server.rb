@@ -4,10 +4,16 @@ require 'feed_ninja'
 
 class Ninja < WEBrick::HTTPServlet::AbstractServlet
   def do_GET request, response
-    response.body = with_captured_stdout do
-      require_relative "./feeds#{request.path}"
+    begin
+      response.body = with_captured_stdout do
+        load File.expand_path(File.dirname(__FILE__)) + "/feeds#{request.path}"
+      end
+      response.header['Content-type'] = 'application/atom+xml'
+
+      response.status = 200
+    rescue LoadError
+      response.status = 404
     end
-    response.status = 200
   end
 end
 

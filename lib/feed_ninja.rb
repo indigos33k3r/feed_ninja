@@ -7,7 +7,6 @@ def get (url, &block)
   ninja = FeedNinja.new
   ninja.instance_eval(&block)
   ninja.fetch(url)
-  puts "Content-type: application/atom+xml\n\n"
   puts ninja.to_s
 end
 
