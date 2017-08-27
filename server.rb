@@ -22,7 +22,7 @@ end
 
 
 
-server = WEBrick::HTTPServer.new(:Port => 3000)
+server = WEBrick::HTTPServer.new(:Port => ENV['PORT'])
 server.mount("/", Ninja)
 
 trap("INT") {
