@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'feed_ninja'
+
+get "http://www.gogetaroomie.com/rss.php" do
+  picture_at "//img[@id='comic']/@src"
+  text_at "//div[@id='newsarea']/p"
+end

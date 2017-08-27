@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'feed_ninja'
+
+get "http://feed.dilbert.com/dilbert/daily_strip" do
+  picture_at "//div[@class='STR_Image']//img/@src"
+end

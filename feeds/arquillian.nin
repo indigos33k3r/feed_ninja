@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'feed_ninja'
+
+get "http://arquillian.org/blog/atom.xml" do
+  title_matches /(Core|Persistence).*Released/
+  text_at '//*[@id="content"]/article'
+end

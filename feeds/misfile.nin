@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+require 'feed_ninja'
+
+get "http://www.misfile.com/rss.php" do
+  title_matches /^Comic/
+  picture_at "//div[@class='comic2']//img/@src"
+  text_at "//div[@id='long_news_1']"
+end
