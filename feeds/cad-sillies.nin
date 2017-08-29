@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-require "feed_ninja"
-
-get "http://cdn.cad-comic.com/rss.xml" do
-  title_matches /Sillies:/
-  picture_at "/html/body/div[@id='page']/div[@id='content']/img/@src"
-end
