@@ -37,7 +37,7 @@ class FeedNinja
       if feed.content_encoding == ['gzip'] then
         feed = Zlib::GzipReader.new(StringIO.new(feed.read)).read
       end
-      doc = RSS::Parser.parse(feed)
+      doc = RSS::Parser.parse(feed, do_validate=false)
       initialize_writer(doc)
       process_items(doc)
     end
