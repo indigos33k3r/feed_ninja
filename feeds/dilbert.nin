@@ -2,5 +2,5 @@
 require 'feed_ninja'
 
 get "http://feed.dilbert.com/dilbert/daily_strip" do
-  picture_at "//div[@class='STR_Image']//img/@src"
+  picture_at '//div[@class="img-comic-container"]//img[@class="img-responsive img-comic"]/@src'
 end
