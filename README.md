@@ -10,3 +10,5 @@ It is inteded to be used with feeds that only provide a sneak peek of the conten
     text_at '//bar/span'
     title_matches /^News/
   end
+
+
