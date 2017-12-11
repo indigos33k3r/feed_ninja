@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'feed_ninja'
+
+get "https://www.rockpapershotgun.com/feed/" do
+  picture_at '//div[@class="entry"]/p[1]/img/@src'
+  text_at '//div[@class="entry"]/p'
+end
