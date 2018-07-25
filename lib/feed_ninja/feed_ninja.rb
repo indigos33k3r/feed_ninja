@@ -1,5 +1,6 @@
 require 'rss'
 require 'open-uri'
+require 'open_uri_redirections'
 require 'nokogiri'
 require 'time'
 require 'thread'
@@ -33,7 +34,7 @@ class FeedNinja
 
   # get the feed and iterate over the entries
   def fetch url
-    open(url) do |feed|
+    open(url, :allow_redirections => :all) do |feed|
       if feed.content_encoding == ['gzip'] then
         feed = Zlib::GzipReader.new(StringIO.new(feed.read)).read
       end

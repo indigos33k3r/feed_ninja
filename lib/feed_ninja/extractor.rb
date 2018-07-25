@@ -1,11 +1,12 @@
 require 'uri'
 require 'open-uri'
+require 'open_uri_redirections'
 
 class Extractor
   attr_accessor :doc
 
   def fetch uri
-    open(URI(uri)) do |site|
+    open(URI(uri), :allow_redirections => :all) do |site|
       @doc = Nokogiri::HTML(site)
       @base_uri = site.base_uri
       #return extract_image(doc, site.base_uri), extract_xml(doc)
